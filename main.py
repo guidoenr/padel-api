@@ -1,11 +1,55 @@
+from ast import parse
+from webbrowser import get
 import requests
 import colors
 from bs4 import BeautifulSoup
 from datetime import datetime
 
+class Day():
+    def __init__(self, day_name:str, date:str):
+        self.day_name = day_name
+        self.date = date
+        self.turnos = []
 
-def parse_button(button_title):
-    splitted = button_title.split()
+    def show_turnos(self):
+        colors.print_green(f'{self.day_name} - {self.date}')
+        for t in self.turnos:
+            print(t)
+
+    def add_turno(self, hour:str):
+        self.turnos.append(hour)
+
+
+def save_turnos():
+    BLINDEX = "https://darturnos.com/turnos/turnero/4188"
+    CERRADA = "https://darturnos.com/turnos/turnero/4189"
+    days = []
+    
+    # all the turnos 
+    turnos_cancha = get_turnos(BLINDEX)
+
+    # first turno
+    aux_day, date, hour = parse_button(turnos_cancha[0])
+
+    # first day
+    new_day = Day(aux_day, date)
+
+    for turno in turnos_cancha:
+        day, date, hour = parse_button(turno)
+        if aux_day == day:
+            new_day.add_turno(hour)
+        else:
+            days.append(new_day)
+            new_day = Day(day, date)
+            new_day.add_turno(hour)
+            aux_day = day
+    
+    for d in days:
+        d.show_turnos()
+
+        
+def parse_button(button):
+    splitted = button["title"].split()
     date = splitted[5]
     hour = splitted[8]
 
@@ -17,22 +61,12 @@ def parse_button(button_title):
 def get_turnos(field):
     page = requests.get(field)
     soup = BeautifulSoup(page.content, "html.parser")
-    buttons = soup.find_all("button") # buttons are the Tags that contains all the info about a turno
-    initial_day, date, hour = parse_button(b["title"])
-    for b in buttons:
-        colors.print_green(initial_day)
-        day, date, hour = parse_button(b["title"])
+    return soup.find_all("button") # buttons are the Tags that contains all the info about a turno
+    
         
-        aux_day = day
-        colors.print_green(aux_day)
-        print(date)
-        print(hour)
-        print("---------")
-
-
 if __name__ == '__main__':
-    BLINDEX = "https://darturnos.com/turnos/turnero/4188"
-    CERRADA = "https://darturnos.com/turnos/turnero/4189"
 
-    buttons = get_turnos(BLINDEX)
+
+    save_turnos()
+
    
