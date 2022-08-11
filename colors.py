@@ -14,3 +14,6 @@ def print_green(text):
 
 def print_red(text):
     print(bcolors.FAIL + text + bcolors.ENDC)
+
+def print_title(text):
+    print(bcolors.BOLD  + bcolors.OKCYAN + "----------[" + text + "]----------" + bcolors.ENDC)

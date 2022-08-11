@@ -1,7 +1,6 @@
-from ast import parse
-from webbrowser import get
 import requests
 import colors
+import sys
 from bs4 import BeautifulSoup
 from datetime import datetime
 
@@ -22,13 +21,27 @@ class Day():
         self.turnos.append(hour)
 
 
-def save_turnos():
-    BLINDEX = "https://darturnos.com/turnos/turnero/4188"
-    CERRADA = "https://darturnos.com/turnos/turnero/4189"
+def parse_button(button):
+    splitted = button["title"].split()
+    date = splitted[5]
+    hour = splitted[8]
+
+    date_time_obj = datetime.strptime(date, '%d/%m/%Y')
+    day_name = date_time_obj.strftime('%A')
+    
+    return day_name, date, hour
+
+def get_turnos(field):
+    page = requests.get(field)
+    soup = BeautifulSoup(page.content, "html.parser")
+    return soup.find_all("button") # buttons are the Tags that contains all the info about a turno
+    
+
+def save_turnos(field):
     days = []
     
     # all the turnos 
-    turnos_cancha = get_turnos(BLINDEX)
+    turnos_cancha = get_turnos(field)
 
     # first turno
     aux_day, date, hour = parse_button(turnos_cancha[0])
@@ -49,26 +62,21 @@ def save_turnos():
     for d in days:
         d.show_turnos()
 
-        
-def parse_button(button):
-    splitted = button["title"].split()
-    date = splitted[5]
-    hour = splitted[8]
-
-    date_time_obj = datetime.strptime(date, '%d/%m/%Y')
-    day_name = date_time_obj.strftime('%A')
-    
-    return day_name, date, hour
-
-def get_turnos(field):
-    page = requests.get(field)
-    soup = BeautifulSoup(page.content, "html.parser")
-    return soup.find_all("button") # buttons are the Tags that contains all the info about a turno
     
         
 if __name__ == '__main__':
+    BLINDEX = "https://darturnos.com/turnos/turnero/4188"
+    CERRADA = "https://darturnos.com/turnos/turnero/4189"
 
+    field = ""
+    cancha_input = sys.argv[1]
+    if cancha_input == "blindex":
+        field = BLINDEX
+        colors.print_title("CANCHA BLINDEX")
+    else:
+        field = CERRADA
+        colors.print_title("CANCHA CERRADA")
 
-    save_turnos()
+    save_turnos(field)
 
    
