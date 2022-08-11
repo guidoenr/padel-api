@@ -11,3 +11,6 @@ class bcolors:
 
 def print_green(text):
     print(bcolors.OKGREEN + text + bcolors.ENDC)
+
+def print_red(text):
+    print(bcolors.FAIL + text + bcolors.ENDC)

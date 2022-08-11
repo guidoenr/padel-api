@@ -13,6 +13,8 @@ class Day():
 
     def show_turnos(self):
         colors.print_green(f'{self.day_name} - {self.date}')
+        if len(self.turnos) == 0:
+            colors.print_red("SIN TURNOS")
         for t in self.turnos:
             print(t)
 
