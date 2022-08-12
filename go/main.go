@@ -20,14 +20,16 @@ type Day struct {
 	date  string
 }
 
-func (d Day) addTurno(turno string) {
+func (d *Day) addTurno(turno string) {
 	d.hours = append(d.hours, turno)
 }
 
-func (d Day) showTurnos() {
+func (d *Day) showTurnos() {
+	printDay(strings.ToUpper(d.name))
 	for _, h := range d.hours {
-		fmt.Printf(h + "\n")
+		printHour(h)
 	}
+	fmt.Println("------------")
 }
 
 func transformDate(date string) time.Time {
@@ -55,9 +57,11 @@ func parseButton(turno soup.Root) (string, string, string) {
 func getTurnos(field string) []soup.Root {
 	var url string
 	if field == "blindex" {
-		url = BLINDEX
+		printTitle("BLINDEX")
+		fmt.Println(field)
 	} else {
 		url = CERRADA
+		printTitle("CERRADA")
 	}
 
 	// make the response
@@ -80,7 +84,6 @@ func saveTurnos(field string) {
 
 	// first turno
 	auxDay, date, _ := parseButton(turnosCancha[0])
-	fmt.Printf("day: %s date: %s", auxDay, date)
 	// first day
 	newDay := Day{
 		name:  auxDay,
@@ -88,13 +91,14 @@ func saveTurnos(field string) {
 		date:  date,
 	}
 
-	for _, turno := range getTurnos(field) {
+	for _, turno := range turnosCancha {
 		day, date, hour := parseButton(turno)
+
 		if auxDay == day {
 			newDay.addTurno(hour)
 		} else {
 			days = append(days, newDay)
-			newDay := Day{
+			newDay = Day{
 				name:  day,
 				hours: nil,
 				date:  date,
@@ -108,17 +112,10 @@ func saveTurnos(field string) {
 		d.showTurnos()
 	}
 
-	buttons := getTurnos(field)
-	for _, b := range buttons {
-		parseButton(b)
-	}
-
 }
 
 func main() {
 	field := flag.String("field", "blindex", "field name")
 	flag.Parse()
-	fmt.Println(*field)
-
 	saveTurnos(*field)
 }
