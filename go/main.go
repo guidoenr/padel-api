@@ -57,8 +57,8 @@ func parseButton(turno soup.Root) (string, string, string) {
 func getTurnos(field string) []soup.Root {
 	var url string
 	if field == "blindex" {
+		url = BLINDEX
 		printTitle("BLINDEX")
-		fmt.Println(field)
 	} else {
 		url = CERRADA
 		printTitle("CERRADA")
