@@ -36,7 +36,7 @@ func transformDate(date string) time.Time {
 	month, _ := strconv.Atoi(d[1])
 	day, _ := strconv.Atoi(d[0])
 
-	return time.Date(year, time.Month(month), day, 0, 0, 0, 0, timeI)
+	return time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.Local)
 }
 
 func parseButton(turno soup.Root) (string, string, string) {
