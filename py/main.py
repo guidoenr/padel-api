@@ -3,7 +3,7 @@ import colors
 import sys
 from bs4 import BeautifulSoup
 from datetime import datetime
-
+from tqdm import tqdm
 BLINDEX = "https://darturnos.com/turnos/turnero/4188"
 CERRADA = "https://darturnos.com/turnos/turnero/4189"
 
@@ -15,12 +15,13 @@ class Day():
         self.turnos = []
 
     def show_turnos(self):
-        colors.print_green(f'{self.day_name} - {self.date}')
+        colors.print_green(f'{self.date}')
+        colors.print_green(f'{self.day_name}')
         if len(self.turnos) == 0:
             colors.print_red("SIN TURNOS")
         for hour in self.turnos:
             colors.print_bold(hour)
-        print("---------------------")
+        print("------------")
 
     def add_turno(self, hour:str):
         self.turnos.append(hour)
@@ -81,6 +82,7 @@ if __name__ == '__main__':
         field = CERRADA
         colors.print_title("CANCHA CERRADA")
 
-    save_turnos(field)
+    save_turnos(field=field)
+
 
    

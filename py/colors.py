@@ -10,7 +10,7 @@ class bcolors:
     UNDERLINE = '\033[4m'
 
 def print_green(text):
-    print(f'{bcolors.OKGREEN}[{text}]{bcolors.ENDC}')
+    print(f'{bcolors.OKGREEN}[--{text}--]{bcolors.ENDC}')
 
 def print_red(text):
     print(f'{bcolors.FAIL}{text}{bcolors.ENDC}')
@@ -19,4 +19,4 @@ def print_title(text):
     print(f'{bcolors.BOLD}{bcolors.WARNING}--[{text}]--{bcolors.ENDC}')
 
 def print_bold(text):
-    print(f'{bcolors.BOLD}       {text}        |{bcolors.ENDC}')
+    print(f'{bcolors.BOLD}|   {text}   |{bcolors.ENDC}')
