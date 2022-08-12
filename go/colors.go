@@ -16,8 +16,7 @@ var White = "\033[97m"
 
 // PrintTitle Print the input in a pretty way
 func printTitle(text string) {
-	fmt.Println("----------------------")
-	fmt.Println(Cyan + "----[" + text + "]----" + Reset)
+	fmt.Println(Cyan + "----[CANCHA " + text + "]----" + Reset)
 }
 
 func printHour(text string) {
