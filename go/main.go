@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/anaskhan96/soup"
-	"github.com/guidoenr/vtools"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -17,6 +17,26 @@ const (
 type Day struct {
 	name  string
 	hours []string
+	date  string
+}
+
+func (d Day) addTurno(turno string) {
+	d.hours = append(d.hours, turno)
+}
+
+func (d Day) showTurnos() {
+	for _, h := range d.hours {
+		fmt.Printf(h + "\n")
+	}
+}
+
+func transformDate(date string) time.Time {
+	d := strings.Split(date, "/")
+	year, _ := strconv.Atoi(d[2])
+	month, _ := strconv.Atoi(d[1])
+	day, _ := strconv.Atoi(d[0])
+
+	return time.Date(year, time.Month(month), day, 0, 0, 0, 0, timeI)
 }
 
 func parseButton(turno soup.Root) (string, string, string) {
@@ -25,17 +45,11 @@ func parseButton(turno soup.Root) (string, string, string) {
 
 	splitted := strings.Split(title, " ")
 
-	date := strings.Replace(splitted[5], "/", "-", 3)
+	// getting the turno's date and the available hour
+	date := transformDate(splitted[5])
 	hour := splitted[8]
 
-	layout := "13-02-2006"
-	t, err := time.Parse(layout, date)
-	if err != nil {
-		fmt.Printf("error parsing date: %v", err)
-	}
-	vtools.Print("parsedDate", t)
-
-	return date, hour, date
+	return date.Weekday().String(), date.String(), hour
 }
 
 func getTurnos(field string) []soup.Root {
@@ -59,29 +73,40 @@ func getTurnos(field string) []soup.Root {
 }
 
 func saveTurnos(field string) {
-	//var days []string
+	var days []Day
 
 	// all the turnos
 	turnosCancha := getTurnos(field)
 
 	// first turno
-	parseButton(turnosCancha[0])
+	auxDay, date, _ := parseButton(turnosCancha[0])
+	fmt.Printf("day: %s date: %s", auxDay, date)
+	// first day
+	newDay := Day{
+		name:  auxDay,
+		hours: nil,
+		date:  date,
+	}
 
-	//# first day
-	//new_day = Day(aux_day, date)
-	//
-	//for turno in turnos_cancha:
-	//	day, date, hour = parse_button(turno)
-	//if aux_day == day:
-	//	new_day.add_turno(hour)
-	//else:
-	//	days.append(new_day)
-	//	new_day = Day(day, date)
-	//	new_day.add_turno(hour)
-	//	aux_day = day
-	//
-	//for d in days:
-	//	d.show_turnos()
+	for _, turno := range getTurnos(field) {
+		day, date, hour := parseButton(turno)
+		if auxDay == day {
+			newDay.addTurno(hour)
+		} else {
+			days = append(days, newDay)
+			newDay := Day{
+				name:  day,
+				hours: nil,
+				date:  date,
+			}
+			newDay.addTurno(hour)
+			auxDay = day
+		}
+	}
+
+	for _, d := range days {
+		d.showTurnos()
+	}
 
 	buttons := getTurnos(field)
 	for _, b := range buttons {
