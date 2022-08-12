@@ -14,8 +14,9 @@ class Day():
         colors.print_green(f'{self.day_name} - {self.date}')
         if len(self.turnos) == 0:
             colors.print_red("SIN TURNOS")
-        for t in self.turnos:
-            print(t)
+        for hour in self.turnos:
+            colors.print_bold(hour)
+        print("---------------------")
 
     def add_turno(self, hour:str):
         self.turnos.append(hour)
@@ -26,8 +27,10 @@ def parse_button(button):
     date = splitted[5]
     hour = splitted[8]
 
+    # transform the date string into a datetime format
     date_time_obj = datetime.strptime(date, '%d/%m/%Y')
-    day_name = date_time_obj.strftime('%A')
+    
+    day_name = date_time_obj.strftime('%A').upper()
     
     return day_name, date, hour
 
