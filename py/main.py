@@ -4,6 +4,10 @@ import sys
 from bs4 import BeautifulSoup
 from datetime import datetime
 
+BLINDEX = "https://darturnos.com/turnos/turnero/4188"
+CERRADA = "https://darturnos.com/turnos/turnero/4189"
+
+
 class Day():
     def __init__(self, day_name:str, date:str):
         self.day_name = day_name
@@ -68,9 +72,6 @@ def save_turnos(field):
     
         
 if __name__ == '__main__':
-    BLINDEX = "https://darturnos.com/turnos/turnero/4188"
-    CERRADA = "https://darturnos.com/turnos/turnero/4189"
-
     field = ""
     cancha_input = sys.argv[1]
     if cancha_input == "blindex":
