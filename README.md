@@ -50,7 +50,7 @@ sys	0m0.000s
 
 ## Golang
 ```bash
-real	0m1.108s
-user	0m0.263s
-sys	0m0.085s
+real	0m0.980s
+user	0m0.009s
+sys	0m0.005s
 ```
