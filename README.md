@@ -41,7 +41,7 @@ Example: `go run . -field=blindex`
 ```bash
 real	0m1.123s
 user	0m0.153s
-sys	    0m0.000s
+sys	 0m0.000s
 ```
 
 ## Golang
