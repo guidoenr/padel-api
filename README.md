@@ -1,7 +1,9 @@
 # padelcuc-shifts
+
 # Purpouse
 Optimize the data collection from the original website of CUC padel shifts. \
 Created for personal purposes, with this `web-scrapper` we can check the available shifts (in a 4 day period) for the two Carmen de Areco's padel fields. 
+
 
 
 
@@ -35,10 +37,7 @@ Example: `go run . -field=blindex`
 
 
 # Output Example
-![](metrics/2022-08-16-19-13-13.png)
-
-# Metrics
-## Python
+![](metrics/2022-08-16-19-13-13.png)git config pull.rebase false
 ```bash
 real	0m1.123s
 user	0m0.153s
