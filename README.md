@@ -38,6 +38,10 @@ Example: `go run . -field=blindex`
 
 # Output Example
 ![](metrics/2022-08-16-19-13-13.png)
+
+# Metrics
+
+## Python
 ```bash
 real	0m1.123s
 user	0m0.153s
