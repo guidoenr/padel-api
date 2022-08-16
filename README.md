@@ -1,5 +1,5 @@
 # padelcuc-shifts
-
+<img src="metrics/padel.png" title="Golang" alt="Golang" width="200" height="160" align="right"/>&nbsp;
 # Purpouse
 Optimize the data collection from the original website of CUC padel shifts. \
 Created for personal purposes, with this `web-scrapper` we can check the available shifts (in a 4 day period) for the two Carmen de Areco's padel fields. 
@@ -37,7 +37,7 @@ Example: `go run . -field=blindex`
 
 
 # Output Example
-![](metrics/2022-08-16-19-13-13.png)
+![](metrics/output.png)
 
 # Metrics
 
