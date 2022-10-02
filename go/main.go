@@ -138,6 +138,7 @@ func main() {
 	wg.Add(2)
 	defer wg.Wait()
 
+	fmt.Println("starting..")
 	go routineGetTurnos(&wg, "blindex")
 	go routineGetTurnos(&wg, "cerrada")
 
