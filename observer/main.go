@@ -13,18 +13,12 @@ const (
 	CERRADA = "https://darturnos.com/turnos/turnero/4189"
 )
 
-type Observer struct {
-	freq            time.Duration // frequency in minutes to observe
-	startNotifyDate time.Time     // start time to send messages to the subs
-	endNotifyDate   time.Time     // end time to send messages to the subs
-	valuableHours   []string      // the hours to check for
-}
-
 type Turno struct {
-	weekday string
-	date    time.Time
-	hour    string
-	field   string
+	weekday   string    // the weekday in string
+	date      time.Time // the date time of the turno
+	hour      string    // the hour of the turno in format hh:mm (e.g 19:00)
+	field     string    // the field, might be blindex/cerrada
+	displayed bool      // displayed will set true if the turno was displayed
 }
 
 type Config struct {
@@ -36,6 +30,15 @@ type Config struct {
 	ValuableHours []string `json:"valuableHours"`
 }
 
+type Observer struct {
+	freq            time.Duration // frequency in minutes to observe
+	turnosToDisplay []Turno       // the valuable turnos stored
+	startNotifyDate time.Time     // start time to send messages to the subs
+	endNotifyDate   time.Time     // end time to send messages to the subs
+	valuableHours   []string      // the hours to check for
+}
+
+// Initialize will unmarshal the config read from the config.json file
 func (o *Observer) Initialize() {
 	var config Config
 	jsonBytes, _ := os.ReadFile("config.json")
@@ -50,7 +53,7 @@ func (o *Observer) Initialize() {
 }
 
 // GetTurnos obtain the turnos from the turnero, parse the response, and returns
-// the most valuable turnos from the current datetime (time.Now)
+// the most valuable turnos
 func (o *Observer) GetTurnos(field string, dateToCheck time.Time) ([]Turno, error) {
 	// getting the available turnos from the turneo
 	response, err := soup.Get(field)
