@@ -24,6 +24,7 @@ type Turno struct {
 	weekday string
 	date    time.Time
 	hour    string
+	field   string
 }
 
 type Config struct {
@@ -50,11 +51,11 @@ func (o *Observer) Initialize() {
 
 // GetTurnos obtain the turnos from the turnero, parse the response, and returns
 // the most valuable turnos from the current datetime (time.Now)
-func (o *Observer) GetTurnos(field string) {
+func (o *Observer) GetTurnos(field string, dateToCheck time.Time) ([]Turno, error) {
 	// getting the available turnos from the turneo
 	response, err := soup.Get(field)
 	if err != nil {
-		fmt.Printf("error making request: %v", err)
+		return nil, fmt.Errorf("error getting response from the field %s: %v", field, err)
 	}
 
 	// parse repsonse into HTMLParse
@@ -62,34 +63,41 @@ func (o *Observer) GetTurnos(field string) {
 	buttons := doc.FindAll("button")
 
 	// getting today dates
-	todayDate := time.Now()
+	todayWeekDay := dateToCheck.Weekday().String()
 
 	// parsing the data gotten from the website to the turno class
 	var turnos []Turno
 	for _, b := range buttons {
 		weekday, date, hour := parseButton(b)
-		if todayDate.Weekday().String() == weekday && isValuable(hour) {
+		if todayWeekDay == weekday && o.isValuable(hour) {
 			turnos = append(turnos, Turno{
 				weekday: weekday,
 				date:    date,
 				hour:    hour,
+				field:   field,
 			})
 		}
 	}
 
-	for _, t := range turnos {
-		fmt.Println(t)
-	}
+	return turnos, nil
 }
 
-func isValuable(hour string) bool {
-	return true
+// isValuable will check if the given hour is valuable, looking into the valuable hours
+// array that the observer has
+func (o *Observer) isValuable(hour string) bool {
+	for _, h := range o.valuableHours {
+		if h == hour {
+			return true
+		}
+	}
+	return false
 }
 
 func main() {
 	var obs Observer
 	obs.Initialize()
 
-	obs.GetTurnos(CERRADA)
+	turnos, _ := obs.GetTurnos(BLINDEX, time.Now())
+	fmt.Println(turnos)
 
 }
