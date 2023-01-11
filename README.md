@@ -1,4 +1,4 @@
-# padelcuc-shifts
+# Turnos Observer
 <img src="metrics/padel.png" title="Golang" alt="Golang" width="170" height="120" align="right"/>&nbsp;
 # Purpouse
 Optimize the data collection from the original website of CUC padel shifts. \
